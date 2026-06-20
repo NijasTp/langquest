@@ -1,23 +1,54 @@
 import React from 'react';
+import { useGameStore } from '../../store/gameStore';
+import { checkNpcProximity } from '../../systems/collision/useCollision';
 
 export function MobileControls() {
-  const triggerKeyEvent = (keyName: string, isDown: boolean) => {
-    const event = new KeyboardEvent(isDown ? 'keydown' : 'keyup', {
-      key: keyName,
-      code: keyName === ' ' ? 'Space' : keyName,
-      bubbles: true,
-    });
-    window.dispatchEvent(event);
+  // Safe helper to set mobileKeys
+  const setMobileKey = (keyName: string, isDown: boolean) => {
+    if (!(window as any).mobileKeys) {
+      (window as any).mobileKeys = {};
+    }
+    (window as any).mobileKeys[keyName] = isDown;
+    
+    // Also dispatch KeyboardEvent as fallback
+    try {
+      const event = new KeyboardEvent(isDown ? 'keydown' : 'keyup', {
+        key: keyName,
+        code: keyName === ' ' ? 'Space' : keyName,
+        keyCode: keyName === ' ' ? 32 : keyName.charCodeAt(0),
+        which: keyName === ' ' ? 32 : keyName.charCodeAt(0),
+        bubbles: true,
+        cancelable: true,
+      });
+      window.dispatchEvent(event);
+    } catch (err) {
+      console.log('Failed to dispatch KeyboardEvent:', err);
+    }
   };
 
   const handlePressStart = (keyName: string, e: React.TouchEvent | React.MouseEvent) => {
-    e.preventDefault();
-    triggerKeyEvent(keyName, true);
+    if (e.cancelable) {
+      e.preventDefault();
+    }
+    setMobileKey(keyName, true);
+
+    // Direct store action for NPC interaction button E
+    if (keyName === 'e') {
+      const { stage, paused, playerPosition, setStage } = useGameStore.getState();
+      if (!paused && stage === 'explore') {
+        const [px, py] = playerPosition;
+        if (checkNpcProximity(px, py)) {
+          setStage('dialogue');
+        }
+      }
+    }
   };
 
   const handlePressEnd = (keyName: string, e: React.TouchEvent | React.MouseEvent) => {
-    e.preventDefault();
-    triggerKeyEvent(keyName, false);
+    if (e.cancelable) {
+      e.preventDefault();
+    }
+    setMobileKey(keyName, false);
   };
 
   return (

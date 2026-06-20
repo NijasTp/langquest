@@ -17,6 +17,30 @@ import { OrientationOverlay } from './components/OrientationOverlay';
 export function App() {
   const [route, setRoute] = useState<'menu' | 'game'>('menu');
 
+  // Trigger fullscreen on first user interaction for mobile browser comfort
+  useEffect(() => {
+    const requestFullScreen = () => {
+      const docEl = document.documentElement;
+      if (!document.fullscreenElement) {
+        if (docEl.requestFullscreen) {
+          docEl.requestFullscreen().catch((err) => console.log('Fullscreen failed:', err));
+        } else if ((docEl as any).webkitRequestFullscreen) {
+          (docEl as any).webkitRequestFullscreen();
+        } else if ((docEl as any).msRequestFullscreen) {
+          (docEl as any).msRequestFullscreen();
+        }
+      }
+    };
+
+    window.addEventListener('click', requestFullScreen, { once: true });
+    window.addEventListener('touchstart', requestFullScreen, { once: true });
+
+    return () => {
+      window.removeEventListener('click', requestFullScreen);
+      window.removeEventListener('touchstart', requestFullScreen);
+    };
+  }, []);
+
   // Key press listener for NPC interaction trigger ('E')
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
