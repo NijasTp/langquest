@@ -37,7 +37,7 @@ export function App() {
 
   if (route === 'menu') {
     return (
-      <div id="app" style={{ width: '100vw', height: '100vh', position: 'relative', overflow: 'hidden' }}>
+      <div id="app">
         <MainMenu
           onPlay={() => {
             useGameStore.getState().resetStore();
@@ -50,7 +50,7 @@ export function App() {
   }
 
   return (
-    <div id="app" style={{ width: '100vw', height: '100vh', position: 'relative', overflow: 'hidden' }}>
+    <div id="app">
       {/* 3D Scene Viewport */}
       <Canvas
         gl={{ antialias: false }}
