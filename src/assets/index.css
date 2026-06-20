@@ -381,32 +381,34 @@ canvas {
   position: absolute;
   top: 90px;
   right: 16px;
-  background: rgba(20, 24, 18, 0.55);
-  backdrop-filter: blur(6px);
-  border: 2px solid rgba(255, 255, 255, 0.15);
-  border-radius: 14px;
-  padding: 10px 14px;
+  background: rgba(15, 11, 26, 0.65);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  padding: 8px 12px;
   color: var(--paper);
-  font-size: 13px;
+  font-size: 8px;
   max-width: 220px;
   z-index: 20;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
 }
 
 .quest-title {
   font-weight: 800;
-  font-size: 11px;
+  font-size: 10px;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 0.5px;
   color: var(--gold);
-  margin-bottom: 4px;
+  margin-bottom: 8px;
 }
 
 .quest-item {
   display: flex;
   align-items: center;
   gap: 6px;
-  opacity: 0.65;
-  margin: 3px 0;
+  opacity: 0.7;
+  margin: 6px 0;
+  line-height: 1.5;
 }
 
 .quest-item.done {
@@ -683,5 +685,130 @@ canvas {
   opacity: 0.8;
   color: #7a7060;
   margin-bottom: 12px;
+}
+
+/* =========================================================================
+   ORIENTATION CHECK OVERLAY
+   ========================================================================= */
+
+.orientation-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: #0f0b1a;
+  z-index: 9999;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  text-align: center;
+  padding: 24px;
+}
+
+.orientation-overlay h1 {
+  font-size: 16px;
+  color: var(--gold);
+  margin: 0 0 12px;
+  letter-spacing: 1px;
+}
+
+.orientation-overlay p {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.6;
+  max-width: 280px;
+  margin: 0;
+}
+
+.rotate-icon {
+  width: 64px;
+  height: 64px;
+  margin-bottom: 24px;
+  color: #8B5CF6;
+  animation: rotate-device 2s ease-in-out infinite;
+}
+
+@keyframes rotate-device {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(-90deg);
+  }
+}
+
+/* Show only on phone sizes (width <= 920px) when in portrait */
+@media (max-width: 920px) and (orientation: portrait) {
+  .orientation-overlay {
+    display: flex;
+  }
+}
+
+/* =========================================================================
+   MOBILE GAMEPLAY CONTROLS
+   ========================================================================= */
+
+.mobile-controls {
+  display: none;
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+  justify-content: space-between;
+  padding: 0 24px;
+  pointer-events: none;
+  z-index: 45;
+}
+
+.mobile-dir-keys,
+.mobile-action-keys {
+  display: flex;
+  gap: 16px;
+}
+
+.mobile-btn-glass {
+  appearance: none;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #ffffff;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  pointer-events: all;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  transition: background-color 0.1s, transform 0.1s;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.mobile-btn-glass:active {
+  background: rgba(255, 255, 255, 0.35);
+  transform: scale(0.9);
+}
+
+.mobile-btn-glass.interact-btn {
+  background: rgba(139, 92, 246, 0.25);
+  border-color: rgba(139, 92, 246, 0.45);
+  font-size: 14px;
+}
+
+.mobile-btn-glass.interact-btn:active {
+  background: rgba(139, 92, 246, 0.5);
+}
+
+/* Show mobile controls only on phone sizes in landscape mode */
+@media (max-width: 920px) and (orientation: landscape) {
+  .mobile-controls {
+    display: flex;
+  }
 }
 

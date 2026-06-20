@@ -11,6 +11,8 @@ import { PauseMenu } from './components/PauseMenu';
 import { LevelComplete } from './components/HUD/LevelComplete';
 import { checkNpcProximity } from './systems/collision/useCollision';
 import { MainMenu } from './pages/MainMenu';
+import { MobileControls } from './components/MobileControls';
+import { OrientationOverlay } from './components/OrientationOverlay';
 
 export function App() {
   const [route, setRoute] = useState<'menu' | 'game'>('menu');
@@ -35,17 +37,20 @@ export function App() {
 
   if (route === 'menu') {
     return (
-      <MainMenu
-        onPlay={() => {
-          useGameStore.getState().resetStore();
-          setRoute('game');
-        }}
-      />
+      <div id="app" style={{ width: '100vw', height: '100vh', position: 'relative', overflow: 'hidden' }}>
+        <MainMenu
+          onPlay={() => {
+            useGameStore.getState().resetStore();
+            setRoute('game');
+          }}
+        />
+        <OrientationOverlay />
+      </div>
     );
   }
 
   return (
-    <div id="app">
+    <div id="app" style={{ width: '100vw', height: '100vh', position: 'relative', overflow: 'hidden' }}>
       {/* 3D Scene Viewport */}
       <Canvas
         gl={{ antialias: false }}
@@ -68,6 +73,10 @@ export function App() {
       <Prompt />
       <PauseMenu />
       <LevelComplete />
+      
+      {/* Mobile control keys and overlays */}
+      <MobileControls />
+      <OrientationOverlay />
     </div>
   );
 }
