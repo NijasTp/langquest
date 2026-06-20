@@ -26,7 +26,7 @@ export function ParallaxLayer({
       texture.wrapS = THREE.RepeatWrapping;
       texture.wrapT = THREE.ClampToEdgeWrapping;
       // Make it repeat based on dimension ratio to avoid visual distortion
-      texture.repeat.set(planeWidth / planeHeight * 1.5, 1);
+      texture.repeat.set(planeWidth / planeHeight, 1);
       texture.needsUpdate = true;
     }
   }, [texture, planeWidth, planeHeight]);

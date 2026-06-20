@@ -34,7 +34,9 @@ function ResponsiveCamera() {
 
   return (
     <OrthographicCamera
+      key={`${size.width}-${size.height}`}
       makeDefault
+      manual
       left={-VIEW * aspect}
       right={VIEW * aspect}
       top={VIEW}

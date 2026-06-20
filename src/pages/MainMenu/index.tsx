@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { OrthographicCamera } from '@react-three/drei';
 import { motion, AnimatePresence } from 'framer-motion';
 import * as THREE from 'three';
@@ -63,7 +63,7 @@ function MenuParallaxLayer({
     if (texture) {
       texture.wrapS = THREE.RepeatWrapping;
       texture.wrapT = THREE.ClampToEdgeWrapping;
-      texture.repeat.set((planeWidth / planeHeight) * 1.5, 1);
+      texture.repeat.set(planeWidth / planeHeight, 1);
       texture.colorSpace = THREE.SRGBColorSpace;
       texture.needsUpdate = true;
     }
@@ -139,7 +139,26 @@ function MenuParticles() {
   );
 }
 
+function ResponsiveMenuCamera() {
+  const { size } = useThree();
+  const aspect = size.width / size.height;
+  const VIEW = 4.5;
 
+  return (
+    <OrthographicCamera
+      key={`${size.width}-${size.height}`}
+      makeDefault
+      manual
+      left={-VIEW * aspect}
+      right={VIEW * aspect}
+      top={VIEW}
+      bottom={-VIEW}
+      near={-50}
+      far={50}
+      position={[0, -2, 10]}
+    />
+  );
+}
 
 // =========================================================================
 // MAIN MENU COMPONENT MAIN
@@ -196,17 +215,8 @@ export function MainMenu({ onPlay }: MainMenuProps) {
         <ambientLight color={0xffffff} intensity={0.8} />
         <directionalLight color={0xfff2cc} intensity={0.5} position={[5, 8, 6]} />
 
-        {/* Orthographic Camera fixed on center */}
-        <OrthographicCamera
-          makeDefault
-          left={-8}
-          right={8}
-          top={4.5}
-          bottom={-4.5}
-          near={-50}
-          far={50}
-          position={[0, -2, 10]}
-        />
+        {/* Responsive Orthographic Camera scaling aspect ratio */}
+        <ResponsiveMenuCamera />
 
         {/* Autoscrolling Parallax layers */}
         <MenuParallaxLayer

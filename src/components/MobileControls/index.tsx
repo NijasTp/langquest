@@ -3,20 +3,14 @@ import { useGameStore } from '../../store/gameStore';
 import { checkNpcProximity } from '../../systems/collision/useCollision';
 
 export function MobileControls() {
-  // Safe helper to set mobileKeys
-  const setMobileKey = (keyName: string, isDown: boolean) => {
-    if (!(window as any).mobileKeys) {
-      (window as any).mobileKeys = {};
-    }
-    (window as any).mobileKeys[keyName] = isDown;
-    
-    // Also dispatch KeyboardEvent as fallback
+  const triggerKeyEvent = (keyName: string, isDown: boolean) => {
     try {
+      // Setup correct event type and properties for broad compatibility
       const event = new KeyboardEvent(isDown ? 'keydown' : 'keyup', {
         key: keyName,
-        code: keyName === ' ' ? 'Space' : keyName,
-        keyCode: keyName === ' ' ? 32 : keyName.charCodeAt(0),
-        which: keyName === ' ' ? 32 : keyName.charCodeAt(0),
+        code: keyName === ' ' ? 'Space' : keyName === 'shift' ? 'ShiftLeft' : keyName,
+        keyCode: keyName === ' ' ? 32 : keyName === 'shift' ? 16 : keyName.toUpperCase().charCodeAt(0),
+        which: keyName === ' ' ? 32 : keyName === 'shift' ? 16 : keyName.toUpperCase().charCodeAt(0),
         bubbles: true,
         cancelable: true,
       });
@@ -30,7 +24,7 @@ export function MobileControls() {
     if (e.cancelable) {
       e.preventDefault();
     }
-    setMobileKey(keyName, true);
+    triggerKeyEvent(keyName, true);
 
     // Direct store action for NPC interaction button E
     if (keyName === 'e') {
@@ -48,7 +42,7 @@ export function MobileControls() {
     if (e.cancelable) {
       e.preventDefault();
     }
-    setMobileKey(keyName, false);
+    triggerKeyEvent(keyName, false);
   };
 
   return (
@@ -88,6 +82,16 @@ export function MobileControls() {
           onMouseLeave={(e) => handlePressEnd('e', e)}
         >
           E
+        </button>
+        <button
+          className="mobile-btn-glass run-btn"
+          onTouchStart={(e) => handlePressStart('shift', e)}
+          onTouchEnd={(e) => handlePressEnd('shift', e)}
+          onMouseDown={(e) => handlePressStart('shift', e)}
+          onMouseUp={(e) => handlePressEnd('shift', e)}
+          onMouseLeave={(e) => handlePressEnd('shift', e)}
+        >
+          🏃
         </button>
         <button
           className="mobile-btn-glass jump-btn"

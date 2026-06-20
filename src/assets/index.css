@@ -751,9 +751,9 @@ canvas {
 .mobile-controls {
   display: none;
   position: absolute;
-  bottom: 20px;
-  left: 0;
-  right: 0;
+  bottom: calc(20px + env(safe-area-inset-bottom));
+  left: env(safe-area-inset-left);
+  right: env(safe-area-inset-right);
   justify-content: space-between;
   padding: 0 24px;
   pointer-events: none;
@@ -768,41 +768,54 @@ canvas {
 
 .mobile-btn-glass {
   appearance: none;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  background: rgba(255, 255, 255, 0.12);
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  background: rgba(15, 11, 26, 0.75); /* Dark glassy contrast background */
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   color: #ffffff;
-  width: 58px;
-  height: 58px;
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 18px;
+  font-size: 20px;
   font-weight: bold;
   cursor: pointer;
   pointer-events: all;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-  transition: background-color 0.1s, transform 0.1s;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+  transition: background-color 0.1s, border-color 0.1s, transform 0.1s;
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
 }
 
 .mobile-btn-glass:active {
-  background: rgba(255, 255, 255, 0.35);
-  transform: scale(0.9);
+  background: rgba(139, 92, 246, 0.7);
+  border-color: rgba(255, 255, 255, 0.6);
+  transform: scale(0.88);
 }
 
 .mobile-btn-glass.interact-btn {
-  background: rgba(139, 92, 246, 0.25);
-  border-color: rgba(139, 92, 246, 0.45);
-  font-size: 14px;
+  background: rgba(139, 92, 246, 0.4);
+  border-color: rgba(139, 92, 246, 0.7);
+  font-size: 16px;
 }
 
 .mobile-btn-glass.interact-btn:active {
-  background: rgba(139, 92, 246, 0.5);
+  background: rgba(139, 92, 246, 0.85);
+  border-color: rgba(255, 255, 255, 0.8);
+}
+
+.mobile-btn-glass.run-btn {
+  background: rgba(255, 200, 0, 0.25);
+  border-color: rgba(255, 200, 0, 0.5);
+  font-size: 18px;
+}
+
+.mobile-btn-glass.run-btn:active {
+  background: rgba(255, 200, 0, 0.55);
+  border-color: rgba(255, 255, 255, 0.8);
 }
 
 /* Show mobile controls only on phone sizes in landscape mode */
